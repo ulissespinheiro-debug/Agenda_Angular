@@ -1,0 +1,56 @@
+<h1>Agenda</h1>
+
+<h3>Adicionar contato</h3>
+
+<form (ngSubmit)="adicionarContato()">
+  <label>Nome:</label>
+  <input type="text" name="nome" [(ngModel)]="nome">
+  <br>
+
+  <label>Telefone:</label>
+  <input type="text" name="telefone" [(ngModel)]="telefone">
+  <br>
+
+  <label>Email:</label>
+  <input type="email" name="email" [(ngModel)]="email">
+  <br>
+
+  <label>Aniversário:</label>
+  <input type="date" name="aniversario" [(ngModel)]="aniversario">
+  <br>
+
+  <label>Tipo:</label>
+  <select name="tipo" [(ngModel)]="tipo">
+    @for (t of tipos; track t) {
+      <option [value]="t">{{t}}</option>
+    }
+  </select>
+  <br>
+
+  <button type="submit">Adicionar</button>
+</form>
+
+<h3>Contatos</h3>
+
+<table>
+  <tr>
+    <th>Nome</th>
+    <th>Telefone</th>
+    <th>Email</th>
+    <th>Aniversário</th>
+    <th>Tipo</th>
+  </tr>
+  @for (c of contatos; track $index) {
+    <tr>
+      <td>{{c.getNome()}}</td>
+      <td>{{c.getTelefone()}}</td>
+      <td>{{c.getEmail()}}</td>
+      <td>{{c.getAniversario() | date:'dd/MM/yyyy'}}</td>
+      <td>{{c.getTipo()}}</td>
+    </tr>
+  }
+</table>
+
+@if (contatos.length == 0) {
+  <p>Nenhum contato cadastrado</p>
+}
