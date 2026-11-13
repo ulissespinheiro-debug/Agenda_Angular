@@ -34,3 +34,14 @@ th, td {
 th {
   background-color: lightgray;
 }
+
+.erro {
+  color: red;
+  font-size: 13px;
+  margin-left: 5px;
+}
+
+button:disabled {
+  background-color: gray;
+  cursor: not-allowed;
+}
