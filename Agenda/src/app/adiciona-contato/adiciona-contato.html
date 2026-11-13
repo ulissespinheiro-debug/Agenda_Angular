@@ -2,32 +2,50 @@
 
 <h3>Adicionar contato</h3>
 
-<form (ngSubmit)="adicionarContato()">
+<form [formGroup]="form" (ngSubmit)="adicionarContato()">
   <label>Nome:</label>
-  <input type="text" name="nome" [(ngModel)]="nome">
+  <input type="text" formControlName="nome">
+  @if (form.get('nome')?.touched && form.get('nome')?.hasError('required')) {
+    <span class="erro">O nome é obrigatório</span>
+  }
+  @if (form.get('nome')?.touched && form.get('nome')?.hasError('minlength')) {
+    <span class="erro">O nome deve ter pelo menos 3 caracteres</span>
+  }
   <br>
 
   <label>Telefone:</label>
-  <input type="text" name="telefone" [(ngModel)]="telefone">
+  <input type="text" formControlName="telefone">
+  @if (form.get('telefone')?.touched && form.get('telefone')?.invalid) {
+    <span class="erro">O telefone é obrigatório</span>
+  }
   <br>
 
   <label>Email:</label>
-  <input type="email" name="email" [(ngModel)]="email">
+  <input type="email" formControlName="email">
+  @if (form.get('email')?.touched && form.get('email')?.hasError('required')) {
+    <span class="erro">O email é obrigatório</span>
+  }
+  @if (form.get('email')?.touched && form.get('email')?.hasError('email')) {
+    <span class="erro">Email inválido</span>
+  }
   <br>
 
   <label>Aniversário:</label>
-  <input type="date" name="aniversario" [(ngModel)]="aniversario">
+  <input type="date" formControlName="aniversario">
+  @if (form.get('aniversario')?.touched && form.get('aniversario')?.invalid) {
+    <span class="erro">O aniversário é obrigatório</span>
+  }
   <br>
 
   <label>Tipo:</label>
-  <select name="tipo" [(ngModel)]="tipo">
+  <select formControlName="tipo">
     @for (t of tipos; track t) {
       <option [value]="t">{{t}}</option>
     }
   </select>
   <br>
 
-  <button type="submit">Adicionar</button>
+  <button type="submit" [disabled]="form.invalid">Adicionar</button>
 </form>
 
 <h3>Contatos</h3>
