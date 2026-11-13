@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { Contato, TipoContato } from '../models/contato';
 
 @Component({
   selector: 'app-adiciona-contato',
-  imports: [FormsModule, DatePipe],
+  imports: [ReactiveFormsModule, DatePipe],
   templateUrl: './adiciona-contato.html',
   styleUrl: './adiciona-contato.css',
 })
@@ -13,29 +13,26 @@ export class AdicionaContato {
   contatos: Contato[] = [];
   tipos = Object.values(TipoContato);
 
-  nome = '';
-  telefone = '';
-  email = '';
-  aniversario = '';
-  tipo = TipoContato.Amigo;
+  form = new FormGroup({
+    nome: new FormControl('', [Validators.required, Validators.minLength(3)]),
+    telefone: new FormControl('', Validators.required),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    aniversario: new FormControl('', Validators.required),
+    tipo: new FormControl(TipoContato.Amigo, Validators.required),
+  });
 
   adicionarContato() {
-    if (this.nome == '' || this.telefone == '' || this.email == '' || this.aniversario == '') {
-      alert('Preencha todos os campos!');
+    if (this.form.invalid) {
       return;
     }
 
-    // coloquei o T00:00 pq sem isso a data ficava um dia antes
-    let data = new Date(this.aniversario + 'T00:00:00');
+    let valores = this.form.value;
 
-    let contato = new Contato(this.nome, this.telefone, this.email, data, this.tipo);
+    let data = new Date(valores.aniversario + 'T00:00:00');
+
+    let contato = new Contato(valores.nome!, valores.telefone!, valores.email!, data, valores.tipo!);
     this.contatos.push(contato);
 
-    // limpa o form
-    this.nome = '';
-    this.telefone = '';
-    this.email = '';
-    this.aniversario = '';
-    this.tipo = TipoContato.Amigo;
+    this.form.reset({ tipo: TipoContato.Amigo });
   }
 }
